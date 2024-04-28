@@ -1,18 +1,18 @@
 import { StateCreator } from "zustand"
-import { Feed } from "../../types/types"
+import { RssFeed } from "../../types/types"
 
 export interface FeedState {
-  feeds: Feed
+  feeds: RssFeed
 }
 
 export interface FeedSlice {
-  feed: Feed
-  setFeed: (feed: Feed) => void
+  feed: RssFeed
+  setFeed: (feed: RssFeed) => void
 }
 
 export const createFeedSlice: StateCreator<FeedSlice, []> = (set) => {
   return {
-    feed: {} as Feed,
+    feed: {} as RssFeed,
     setFeed(feed) {
       set((state) => ({
         ...state,

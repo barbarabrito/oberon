@@ -16,7 +16,7 @@ const Dashboard = () => {
               <a href={content.link[0]} target={"_blank"}>
                 <h1 className="text-2xl font-news">{content.title}</h1>
               </a>
-              <span className="text-xs">{content.pubDate[0]}</span>
+              <span className="text-xs">{content.pubDate}</span>
             </div>
           </div>
         )

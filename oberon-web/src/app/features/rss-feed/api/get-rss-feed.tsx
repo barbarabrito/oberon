@@ -1,6 +1,6 @@
 "use server"
 
-import { Feed } from "@/app/components/feed/types/types"
+import { RssFeed } from "@/app/features/rss-feed/types/types"
 
 const parseString = require("xml2js").parseString
 
@@ -20,12 +20,12 @@ export async function getRssFeed(url: string) {
 
 function parseXMLResponse(xml: string): any {
   return new Promise((resolve, reject) => {
-    parseString(xml, (error: Error, result: Feed) => {
+    parseString(xml, (error: Error, result: RssFeed) => {
       if (error) {
         reject(error)
-      } else {
-        resolve(result)
+        return
       }
+      resolve(result)
     })
   })
 }

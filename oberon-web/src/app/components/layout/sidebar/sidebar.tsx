@@ -1,6 +1,6 @@
 "use client"
 
-import { getRssFeed } from "@/app/(main)/api/get-rss-feed"
+import { getRssFeed } from "@/app/features/rss-feed/api/get-rss-feed"
 import useBoundStore from "@/app/stores/store"
 import { FaFolder } from "react-icons/fa"
 import { PiUserCircleFill } from "react-icons/pi"

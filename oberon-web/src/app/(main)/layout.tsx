@@ -1,7 +1,7 @@
 import "../globals.css"
 import type { Metadata } from "next"
 import { Inter, Work_Sans } from "next/font/google"
-import { Sidebar } from "../components/sidebar"
+import { Sidebar } from "../components/layout/sidebar"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -25,7 +25,8 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${inter.className} ${workSans.variable}`}>
         <div className="flex">
-          <Sidebar />{children}
+          <Sidebar />
+          {children}
         </div>
       </body>
     </html>
