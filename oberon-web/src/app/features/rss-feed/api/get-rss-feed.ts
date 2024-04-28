@@ -12,7 +12,6 @@ export async function getRssFeed(url: string) {
     const xmlString = await response.text()
     const parsedXML = await parseXMLResponse(xmlString)
     return parsedXML
-
   } catch (error) {
     console.log(error)
   }

@@ -2,6 +2,7 @@
 
 import { getRssFeed } from "@/app/features/rss-feed/api/get-rss-feed"
 import useBoundStore from "@/app/stores/store"
+import { useEffect, useState } from "react"
 import { FaFolder } from "react-icons/fa"
 import { PiUserCircleFill } from "react-icons/pi"
 
@@ -67,7 +68,8 @@ const Sidebar = () => {
         <PiUserCircleFill />
         username
       </span>
-      <div className="mt-10">
+
+      {/* <div className="mt-10">
         <ul>
           {folders.map((folder) => (
             <li key={folder.id} className="flex gap-2 items-center cursor-pointer p-0.5">
@@ -76,7 +78,7 @@ const Sidebar = () => {
             </li>
           ))}
         </ul>
-      </div>
+      </div> */}
 
       <div className="mt-10">
         <ul>
