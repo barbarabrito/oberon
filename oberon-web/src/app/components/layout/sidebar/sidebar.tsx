@@ -5,62 +5,45 @@ import useBoundStore from "@/app/stores/store"
 import { useEffect, useState } from "react"
 import { FaFolder } from "react-icons/fa"
 import { PiUserCircleFill } from "react-icons/pi"
+import * as Collapsible from '@radix-ui/react-collapsible';
 
-const feeds = [
-  {
-    id: 1,
-    name: "Natoque",
-    url: "https://news.ycombinator.com/rss",
-  },
-  {
-    id: 2,
-    name: "Ultricies",
-    url: "https://news.ycombinator.com/rss",
-  },
-  {
-    id: 3,
-    name: "Posuere",
-    url: "https://news.ycombinator.com/rss",
-  },
-  {
-    id: 4,
-    name: "Ligula",
-    url: "https://news.ycombinator.com/rss",
-  },
-  {
-    id: 5,
-    name: "Maximus",
-    url: "https://news.ycombinator.com/rss",
-  },
-  {
-    id: 6,
-    name: "Accumsan",
-    url: "https://news.ycombinator.com/rss",
-  },
-]
+type Folders = {
+  id: number;
+  name: number;
+  user_rss_feeds: UserFeed[]
+}[];
 
-const folders = [
-  {
-    id: 1,
-    name: "tech",
-  },
-  {
-    id: 2,
-    name: "science",
-  },
-  {
-    id: 3,
-    name: "memes",
-  },
-]
+type UserFeed = {
+  id: number
+  name: string
+  url: string
+};
 
 const Sidebar = () => {
+  const [folders, setFolders] = useState<Folders>([])
+
   const { setFeed } = useBoundStore()
 
   async function getSite(feedUrl: string) {
     const feed = await getRssFeed(feedUrl)
     setFeed(feed.rss)
   }
+
+  useEffect(() => {
+    async function fetchUserFolders() {
+      try {
+        const response = await fetch('/mocks/folders.json');
+        if (!response.ok) throw new Error('Failed to fetch folders');
+
+        const folders = await response.json();
+        setFolders(folders);
+
+      } catch (error) {
+        console.error('Error fetching folders:', error);
+      }
+    }
+    fetchUserFolders();
+  }, [])
 
   return (
     <div className="flex flex-grow-0 flex-col h-screen min-w-80 p-2 shadow-md bg-zinc-700">
@@ -69,22 +52,28 @@ const Sidebar = () => {
         username
       </span>
 
-      {/* <div className="mt-10">
+      <div className="mt-10">
         <ul>
           {folders.map((folder) => (
             <li key={folder.id} className="flex gap-2 items-center cursor-pointer p-0.5">
-              <FaFolder />
-              <button>{folder.name}</button>
-            </li>
-          ))}
-        </ul>
-      </div> */}
-
-      <div className="mt-10">
-        <ul>
-          {feeds.map((feed) => (
-            <li key={feed.id}>
-              <button onClick={() => getSite(feed.url)}>{feed.name}</button>
+              <Collapsible.Root>
+                <Collapsible.Trigger>
+                  <span className="flex items-center gap-2">
+                    <FaFolder /> {folder.name}
+                  </span>
+                </Collapsible.Trigger>
+                <Collapsible.Content>
+                  <div className="ml-6 text-gray-300">
+                    <ul className="text-sm">
+                      {folder.user_rss_feeds.map((feed, index) => (
+                        <li key={index} className="hover:text-gray-400">
+                          <button onClick={() => getSite(feed.url)}>{feed.name}</button>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </Collapsible.Content>
+              </Collapsible.Root>
             </li>
           ))}
         </ul>
