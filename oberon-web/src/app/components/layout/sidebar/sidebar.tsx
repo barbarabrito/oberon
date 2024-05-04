@@ -3,7 +3,7 @@
 import { getRssFeed } from "@/app/features/rss-feed/api/get-rss-feed"
 import useBoundStore from "@/app/stores/store"
 import { useEffect, useState } from "react"
-import { FaFolder } from "react-icons/fa"
+import { MdFolderOpen } from "react-icons/md"
 import { PiUserCircleFill } from "react-icons/pi"
 import * as Collapsible from "@radix-ui/react-collapsible"
 
@@ -46,7 +46,7 @@ const Sidebar = () => {
 
   return (
     <div className="flex flex-grow-0 flex-col h-screen min-w-80 p-2 shadow-md bg-zinc-800 px-4">
-      <span className="text-orange-400 flex items-center gap-1">
+      <span className="text-indigo-300 flex items-center gap-1">
         <PiUserCircleFill />
         username
       </span>
@@ -58,7 +58,7 @@ const Sidebar = () => {
               <Collapsible.Root defaultOpen>
                 <Collapsible.Trigger className="flex items-center gap-1 w-full justify-between py-0.5">
                   <div className="flex items-center gap-1.5">
-                    <FaFolder className="text-sm" /> {folder.name}
+                    <MdFolderOpen className="text-sm" /> {folder.name}
                   </div>
                 </Collapsible.Trigger>
                 <Collapsible.Content>
