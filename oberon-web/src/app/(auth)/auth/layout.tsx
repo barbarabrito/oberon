@@ -9,7 +9,7 @@ const workSans = Work_Sans({
   variable: "--work-sans",
 })
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body className={`${inter.className} ${workSans.variable}`}>{children}</body>

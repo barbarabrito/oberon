@@ -6,6 +6,7 @@ import { useEffect, useState } from "react"
 import { MdFolderOpen } from "react-icons/md"
 import { PiUserCircleFill } from "react-icons/pi"
 import * as Collapsible from "@radix-ui/react-collapsible"
+import { createSupabaseBrowserClient } from "@/lib/supabase/supabase-browser-client"
 
 type Folders = {
   id: number
@@ -22,7 +23,7 @@ type UserFeed = {
 const Sidebar = () => {
   const [folders, setFolders] = useState<Folders>([])
 
-  const { setFeed } = useBoundStore()
+  const { setFeed, user } = useBoundStore()
 
   async function getSite(feedUrl: string) {
     const feed = await getRssFeed(feedUrl)
@@ -46,12 +47,12 @@ const Sidebar = () => {
 
   return (
     <div className="flex flex-grow-0 flex-col h-screen min-w-80 p-2 shadow-md bg-zinc-800 px-4">
-      <span className="text-indigo-300 flex items-center gap-1">
-        <PiUserCircleFill />
-        username
-      </span>
-
-      <div className="mt-10">
+      {user && (
+        <span className="text-indigo-300 flex items-center gap-1">
+          <PiUserCircleFill /> {user.username}
+        </span>
+      )}
+      <div className="mt-5">
         <ul>
           {folders.map((folder) => (
             <li key={folder.id}>

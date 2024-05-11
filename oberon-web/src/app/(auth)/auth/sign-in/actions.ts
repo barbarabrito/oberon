@@ -18,6 +18,6 @@ export async function signIn(formData: FormData) {
     return
   }
 
-  revalidatePath('/', 'layout')
+  revalidatePath("/", "layout")
   redirect("/dashboard")
 }
