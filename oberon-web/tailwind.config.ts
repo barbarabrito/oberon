@@ -15,6 +15,9 @@ const config: Config = {
       fontFamily: {
         news: ["var(--work-sans)"],
       },
+      colors: {
+        "main-background": "#1A1A1A",
+      },
     },
   },
   plugins: [],

@@ -1,5 +1,4 @@
 "use client"
-
 import { getRssFeed } from "@/app/features/rss-feed/api/get-rss-feed"
 import useBoundStore from "@/app/stores/store"
 import { useEffect, useState } from "react"
@@ -7,6 +6,15 @@ import { MdFolderOpen } from "react-icons/md"
 import { PiUserCircleFill } from "react-icons/pi"
 import * as Collapsible from "@radix-ui/react-collapsible"
 import { createSupabaseBrowserClient } from "@/lib/supabase/supabase-browser-client"
+import { TbLogout } from "react-icons/tb"
+
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/app/components/ui/popup"
 
 type Folders = {
   id: number
@@ -21,9 +29,9 @@ type UserFeed = {
 }
 
 const Sidebar = () => {
-  const [folders, setFolders] = useState<Folders>([])
-
   const { setFeed, user } = useBoundStore()
+  const [folders, setFolders] = useState<Folders>([])
+  const [isLogoutPopupOpen, setIsLogoutPopupOpen] = useState(false)
 
   async function getSite(feedUrl: string) {
     const feed = await getRssFeed(feedUrl)
@@ -46,13 +54,13 @@ const Sidebar = () => {
   }, [])
 
   return (
-    <div className="flex flex-grow-0 flex-col h-screen min-w-80 p-2 shadow-md bg-zinc-800 px-4">
+    <div className="flex flex-grow-0 flex-col h-screen min-w-80 p-2 shadow-md bg-zinc-800 px-4 relative">
       {user && (
         <span className="text-indigo-300 flex items-center gap-1">
           <PiUserCircleFill /> {user.username}
         </span>
       )}
-      <div className="mt-5">
+      <section className="mt-5">
         <ul>
           {folders.map((folder) => (
             <li key={folder.id}>
@@ -77,8 +85,53 @@ const Sidebar = () => {
             </li>
           ))}
         </ul>
-      </div>
+      </section>
+      <section className="absolute bottom-4 left-2 w-[90%]">
+        {user && (
+          <>
+            <button
+              onClick={() => setIsLogoutPopupOpen(true)}
+              className="text-red-400 text-sm flex gap-2 items-center w-full justify-between"
+            >
+              Log out <TbLogout className="text-lg" />
+            </button>
+          </>
+        )}
+        <LogoutPopup open={isLogoutPopupOpen} setOpen={setIsLogoutPopupOpen} />
+      </section>
     </div>
   )
 }
+
+const LogoutPopup = ({ open, setOpen }: any) => {
+  const supabase = createSupabaseBrowserClient()
+
+  async function logout() {
+    await supabase.auth.signOut({ scope: "local" })
+  }
+
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogContent className="bg-main-background border-none ">
+        <DialogHeader>
+          <DialogTitle className="mb-4 text-gray-300">
+            Are you sure you want to log out?
+          </DialogTitle>
+          <DialogDescription className="text-gray-400">
+            Click &quot;Cancel&quot; to return or &quot;Logout&quot; to proceed.
+            <span className="mt-4 text-right flex items-center gap-2 justify-end">
+              <button onClick={() => setOpen(false)} className="text-gray-400">
+                Cancel
+              </button>
+              <button onClick={logout} className="text-red-400">
+                Logout
+              </button>
+            </span>
+          </DialogDescription>
+        </DialogHeader>
+      </DialogContent>
+    </Dialog>
+  )
+}
+
 export default Sidebar
