@@ -16,7 +16,7 @@ const config: Config = {
         news: ["var(--work-sans)"],
       },
       colors: {
-        "main-background": "#1A1A1A",
+        main: "#1A1A1A",
       },
     },
   },

@@ -28,7 +28,7 @@ const LogoutPopup = ({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="bg-main-background border-none">
+      <DialogContent className="bg-main border-none">
         <DialogHeader>
           <DialogTitle className="mb-4 text-gray-300">
             Are you sure you want to log out?

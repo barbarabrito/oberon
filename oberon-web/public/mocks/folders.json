@@ -22,7 +22,13 @@
         "id": 4,
         "name": "Ligula",
         "url": "https://news.ycombinator.com/rss"
-      },
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "science",
+    "user_rss_feeds": [
       {
         "id": 5,
         "name": "Maximus",
@@ -36,13 +42,14 @@
     ]
   },
   {
-    "id": 2,
-    "name": "science",
-    "user_rss_feeds": []
-  },
-  {
     "id": 3,
     "name": "memes",
-    "user_rss_feeds": []
+    "user_rss_feeds": [
+      {
+        "id": 7,
+        "name": "Faucibus",
+        "url": "https://news.ycombinator.com/rss"
+      }
+    ]
   }
 ]
