@@ -35,7 +35,7 @@ const LogoutPopup = ({
           </DialogTitle>
           <DialogDescription className="text-gray-400">
             Click &quot;Cancel&quot; to return or &quot;Logout&quot; to proceed.
-            <span className="mt-4 text-right flex items-center gap-2 justify-end">
+            <span className="mt-4 text-right flex items-center gap-4 justify-end">
               <button onClick={() => setOpen(false)} className="text-gray-400">
                 Cancel
               </button>

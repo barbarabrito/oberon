@@ -36,7 +36,7 @@ const Sidebar = () => {
     fetchUserFolders()
   }, [setFolders])
 
-  function handleAddNewFolder() {
+  function handleAddNewFeed() {
     setIsAddFeedPopupOpen(true)
   }
 
@@ -50,7 +50,7 @@ const Sidebar = () => {
       <section className="mt-8 px-4 text-lg h-20 ">
         <div className="">
           <button
-            onClick={handleAddNewFolder}
+            onClick={handleAddNewFeed}
             className="flex items-center gap-1 mb-1.5 hover:text-gray-400"
           >
             <FaRss className="h-4 w-5" /> New feed
