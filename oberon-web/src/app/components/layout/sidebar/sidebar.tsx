@@ -99,7 +99,7 @@ const Sidebar = () => {
         </ul>
       </section>
       <section className="absolute bottom-4 left-2 w-[90%]">
-        {Object.keys(user).length > 0 && (
+        {Object.keys(user).length == 0 && (
           <>
             <button
               onClick={() => setIsLogoutPopupOpen(true)}

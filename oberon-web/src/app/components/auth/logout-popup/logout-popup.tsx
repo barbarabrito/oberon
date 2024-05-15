@@ -1,6 +1,7 @@
 "use client"
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogHeader,
@@ -29,6 +30,7 @@ const LogoutPopup = ({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="bg-main border-none">
+        <DialogClose />
         <DialogHeader>
           <DialogTitle className="mb-4 text-gray-300">
             Are you sure you want to log out?
