@@ -44,8 +44,8 @@ const DialogContent = React.forwardRef<
     >
       {children}
       <DialogPrimitive.Close className="absolute right-4 top-4 rounded-sm disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
-        <IoMdClose className="h-4 w-4" />
-        <span className="sr-only">Close</span>
+        {/* <IoMdClose className="h-4 w-4" />
+        <span className="sr-only">Close</span> */}
       </DialogPrimitive.Close>
     </DialogPrimitive.Content>
   </DialogPortal>

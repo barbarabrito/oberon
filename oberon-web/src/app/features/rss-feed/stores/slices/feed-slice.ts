@@ -5,9 +5,25 @@ export interface FeedState {
   feeds: RssFeed
 }
 
+export interface UserFeed {
+  id: number
+  name: string
+  url: string
+}
+
+export interface Folders {
+  id: number
+  name: number
+  user_rss_feeds: UserFeed[]
+}
+
 export interface FeedSlice {
   feed: RssFeed
   setFeed: (feed: RssFeed) => void
+  isAddFeedPopupOpen: boolean
+  setIsAddFeedPopupOpen: (isAddFeedPopupOpen: boolean) => void
+  folders: Folders[]
+  setFolders: (folders: Folders[]) => void
 }
 
 export const createFeedSlice: StateCreator<FeedSlice, []> = (set) => {
@@ -17,6 +33,20 @@ export const createFeedSlice: StateCreator<FeedSlice, []> = (set) => {
       set((state) => ({
         ...state,
         feed,
+      }))
+    },
+    isAddFeedPopupOpen: false,
+    setIsAddFeedPopupOpen(isAddFeedPopupOpen) {
+      set((state) => ({
+        ...state,
+        isAddFeedPopupOpen,
+      }))
+    },
+    folders: [],
+    setFolders(folders) {
+      set((state) => ({
+        ...state,
+        folders,
       }))
     },
   }

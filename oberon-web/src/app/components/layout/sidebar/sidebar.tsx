@@ -10,24 +10,10 @@ import { LogoutPopup } from "@/app/components/auth/logout-popup"
 import { FaPlus } from "react-icons/fa"
 import { FaRss } from "react-icons/fa"
 import { MdOutlineCreateNewFolder } from "react-icons/md"
-import { LuSettings } from "react-icons/lu"
-import { RiSettingsLine } from "react-icons/ri"
-
-type Folders = {
-  id: number
-  name: number
-  user_rss_feeds: UserFeed[]
-}[]
-
-type UserFeed = {
-  id: number
-  name: string
-  url: string
-}
+import AddFeedPopup from "../../dashboard/feed/add-feed-popup"
 
 const Sidebar = () => {
-  const { setFeed, user } = useBoundStore()
-  const [folders, setFolders] = useState<Folders>([])
+  const { setFeed, user, setIsAddFeedPopupOpen, folders, setFolders } = useBoundStore()
   const [isLogoutPopupOpen, setIsLogoutPopupOpen] = useState(false)
 
   async function getSite(feedUrl: string) {
@@ -48,7 +34,11 @@ const Sidebar = () => {
       }
     }
     fetchUserFolders()
-  }, [])
+  }, [setFolders])
+
+  function handleAddNewFolder() {
+    setIsAddFeedPopupOpen(true)
+  }
 
   return (
     <div className="flex flex-grow-0 flex-col h-screen min-w-80 py-2 shadow-md bg-zinc-800 relative">
@@ -59,7 +49,10 @@ const Sidebar = () => {
       )}
       <section className="mt-8 px-4 text-lg h-20 ">
         <div className="">
-          <button className="flex items-center gap-1 mb-1.5 hover:text-gray-400">
+          <button
+            onClick={handleAddNewFolder}
+            className="flex items-center gap-1 mb-1.5 hover:text-gray-400"
+          >
             <FaRss className="h-4 w-5" /> New feed
           </button>
           <button className="flex items-center gap-1 mb-1.5 hover:text-gray-400">
@@ -68,6 +61,7 @@ const Sidebar = () => {
           {/* <button className="flex items-center gap-1 hover:text-gray-400">
             <RiSettingsLine className="h-5 w-5" />
           </button> */}
+          <AddFeedPopup />
         </div>
       </section>
       <section className="mt-2 px-4">
