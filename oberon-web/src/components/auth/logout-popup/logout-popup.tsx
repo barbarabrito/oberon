@@ -6,7 +6,7 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/app/components/ui/popup"
+} from "@/components/ui/popup"
 import { createSupabaseBrowserClient } from "@/lib/supabase/supabase-browser-client"
 import { Dispatch, SetStateAction } from "react"
 import { useRouter } from "next/navigation"

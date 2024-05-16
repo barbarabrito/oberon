@@ -1,8 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
-import { Dialog, DialogClose, DialogContent, DialogOverlay } from "@/app/components/ui/popup"
-import useBoundStore from "@/app/stores/store"
+import { Dialog, DialogClose, DialogContent, DialogOverlay } from "@/src/components/ui/popup"
+import { getRssFeed } from "@/src/features/rss-feed/api/get-rss-feed"
+import useBoundStore from "@/src/stores/store"
 import { ChangeEvent, FormEvent, MouseEvent, useState } from "react"
-import { getRssFeed } from "@/app/features/rss-feed/api/get-rss-feed"
 import { FaRss } from "react-icons/fa"
 import { IoMdClose } from "react-icons/io"
 import { TbTrashX } from "react-icons/tb"

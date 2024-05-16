@@ -1,6 +1,6 @@
 "use client"
-import { FeedReader } from "@/app/components/dashboard/feed-reader"
-import useBoundStore from "@/app/stores/store"
+import { FeedReader } from "@/components/dashboard/feed-reader"
+import useBoundStore from "@/stores/store"
 import { createSupabaseBrowserClient } from "@/lib/supabase/supabase-browser-client"
 import { useEffect } from "react"
 

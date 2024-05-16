@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { signIn } from "./actions"
-import AuthButton from "@/app/components/auth/auth-button/auth-button"
+import AuthButton from "@/components/auth/auth-button/auth-button"
 
 export const metadata = {
   title: "Sign In",

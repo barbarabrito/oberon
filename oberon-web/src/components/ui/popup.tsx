@@ -2,8 +2,8 @@
 
 import * as React from "react"
 import * as DialogPrimitive from "@radix-ui/react-dialog"
-import { cn } from "@/lib/utils"
 import { IoMdClose } from "react-icons/io"
+import { cn } from "@/src/lib/utils"
 
 const Dialog = DialogPrimitive.Root
 

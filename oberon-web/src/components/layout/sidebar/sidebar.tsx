@@ -1,16 +1,17 @@
 "use client"
-import { getRssFeed } from "@/app/features/rss-feed/api/get-rss-feed"
-import useBoundStore from "@/app/stores/store"
+
 import { useEffect, useState } from "react"
 import { MdFolderOpen } from "react-icons/md"
 import { PiUserCircleFill } from "react-icons/pi"
 import * as Collapsible from "@radix-ui/react-collapsible"
 import { TbLogout } from "react-icons/tb"
-import { LogoutPopup } from "@/app/components/auth/logout-popup"
 import { FaPlus } from "react-icons/fa"
 import { FaRss } from "react-icons/fa"
 import { MdOutlineCreateNewFolder } from "react-icons/md"
-import AddFeedPopup from "../../dashboard/feed/add-feed-popup"
+import { getRssFeed } from "@/src/features/rss-feed/api/get-rss-feed"
+import useBoundStore from "@/src/stores/store"
+import AddFeedPopup from "@/src/components/dashboard/add-feed-popup/add-feed-popup"
+import { LogoutPopup } from "@/src/components/auth/logout-popup"
 
 const Sidebar = () => {
   const { setFeed, user, setIsAddFeedPopupOpen, folders, setFolders } = useBoundStore()
@@ -79,7 +80,9 @@ const Sidebar = () => {
                     </div>
                     <div className=" group-hover:block hidden text-xs text-gray-500">
                       <div className="flex items-center gap-1">
-                        <FaPlus className="h-2.5 w-2.5 text-gray-500 group-hover:block hidden " />{" "}
+                        <button>
+                          <FaPlus className="h-2.5 w-2.5 text-gray-500 group-hover:block hidden " />{" "}
+                        </button>
                         Add feed
                       </div>
                     </div>
