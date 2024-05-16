@@ -1,17 +1,16 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { MdFolderOpen } from "react-icons/md"
+import { MdFolderOpen, MdOutlineCreateNewFolder } from "react-icons/md"
 import { PiUserCircleFill } from "react-icons/pi"
 import * as Collapsible from "@radix-ui/react-collapsible"
 import { TbLogout } from "react-icons/tb"
 import { FaPlus } from "react-icons/fa"
 import { FaRss } from "react-icons/fa"
-import { MdOutlineCreateNewFolder } from "react-icons/md"
-import { getRssFeed } from "@/src/features/rss-feed/api/get-rss-feed"
-import useBoundStore from "@/src/stores/store"
-import AddFeedPopup from "@/src/components/dashboard/add-feed-popup/add-feed-popup"
-import { LogoutPopup } from "@/src/components/auth/logout-popup"
+import useBoundStore from "@//stores/store"
+import { getRssFeed } from "@//features/rss-feed/api/get-rss-feed"
+import AddFeedPopup from "../../dashboard/add-feed-popup/add-feed-popup"
+import { LogoutPopup } from "../../auth/logout-popup"
 
 const Sidebar = () => {
   const { setFeed, user, setIsAddFeedPopupOpen, folders, setFolders } = useBoundStore()

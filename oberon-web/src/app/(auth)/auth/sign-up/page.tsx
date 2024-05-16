@@ -1,4 +1,5 @@
-import AuthButton from "@/components/auth/auth-button/auth-button"
+
+import AuthButton from "@//components/auth/auth-button/auth-button"
 import { signUp } from "./actions"
 import Link from "next/link"
 

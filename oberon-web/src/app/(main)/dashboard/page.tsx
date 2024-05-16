@@ -1,7 +1,8 @@
 "use client"
-import { FeedReader } from "@/components/dashboard/feed-reader"
-import useBoundStore from "@/stores/store"
-import { createSupabaseBrowserClient } from "@/lib/supabase/supabase-browser-client"
+
+import { FeedReader } from "@//components/dashboard/feed-reader"
+import { createSupabaseBrowserClient } from "@//lib/supabase/supabase-browser-client"
+import useBoundStore from "@//stores/store"
 import { useEffect } from "react"
 
 const Dashboard = () => {

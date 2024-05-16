@@ -1,11 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
-import { Dialog, DialogClose, DialogContent, DialogOverlay } from "@/src/components/ui/popup"
-import { getRssFeed } from "@/src/features/rss-feed/api/get-rss-feed"
-import useBoundStore from "@/src/stores/store"
+
+import { getRssFeed } from "@//features/rss-feed/api/get-rss-feed"
+import useBoundStore from "@//stores/store"
 import { ChangeEvent, FormEvent, MouseEvent, useState } from "react"
 import { FaRss } from "react-icons/fa"
 import { IoMdClose } from "react-icons/io"
 import { TbTrashX } from "react-icons/tb"
+import { Dialog, DialogClose, DialogContent, DialogOverlay, DialogTitle } from "../../ui/popup"
 
 type SelectOptions = "SELECT_FOLDER" | "CREATE_NEW_FOLDER"
 
@@ -104,7 +105,7 @@ const AddFeedPopup = () => {
 
                 <div className="mt-1">
                   <label
-                    htmlFor="CREATE_NEW_FOLDER"
+                    htmlFor="select_folder"
                     className={`flex items-center justify-between gap-1 ${selectedOption === "SELECT_FOLDER" ? "text-white" : "text-gray-600"} `}
                   >
                     <div className="flex items-center justify-between gap-1">

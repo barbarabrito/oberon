@@ -1,7 +1,7 @@
 "use client"
 
-import useBoundStore from "@/src/stores/store"
-import { formatDate } from "@/src/utils/formatters/date-formatter"
+import useBoundStore from "@//stores/store"
+import { formatDate } from "@//utils/formatters/date-formatter"
 
 const FeedReader = () => {
   const { feed } = useBoundStore()
@@ -17,9 +17,7 @@ const FeedReader = () => {
               <a href={content.link[0]} target={"_blank"}>
                 <h1 className="text-2xl font-news">{content.title}</h1>
               </a>
-              {content.pubDate && (
-                <span className="text-xs">{formatDate(content.pubDate[0])}</span>
-              )}
+              {content.pubDate && <span className="text-xs">{formatDate(content.pubDate[0])}</span>}
             </div>
           </div>
         )
