@@ -9,12 +9,14 @@ export interface UserFeed {
   id: number
   name: string
   url: string
+  image_url?: string
 }
 
 export interface Folders {
   id: number
+  user_id: string
   name: number
-  user_rss_feeds: UserFeed[]
+  rss_feeds: UserFeed[]
 }
 
 export interface FeedSlice {

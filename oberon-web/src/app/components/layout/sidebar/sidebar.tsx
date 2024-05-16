@@ -23,18 +23,21 @@ const Sidebar = () => {
 
   useEffect(() => {
     async function fetchUserFolders() {
-      try {
-        const response = await fetch("/mocks/folders.json")
-        if (!response.ok) throw new Error("Failed to fetch folders")
+      if (user.id) {
+        try {
+          const response = await fetch(`/api/users/${user.id}/folders`)
+          if (!response.ok) throw new Error("Failed to fetch folders")
 
-        const folders = await response.json()
-        setFolders(folders)
-      } catch (error) {
-        console.error("Error fetching folders:", error)
+          const folders = await response.json()
+          console.log(folders)
+          setFolders(folders)
+        } catch (error) {
+          console.error("Error fetching folders:", error)
+        }
       }
     }
     fetchUserFolders()
-  }, [setFolders])
+  }, [setFolders, user.id])
 
   function handleAddNewFeed() {
     setIsAddFeedPopupOpen(true)
@@ -85,7 +88,7 @@ const Sidebar = () => {
                 <Collapsible.Content>
                   <div className="ml-5 text-gray-300">
                     <ul className="text-sm">
-                      {folder.user_rss_feeds.map((feed, index) => (
+                      {folder.rss_feeds.map((feed, index) => (
                         <li key={index} className="text-gray-400 hover:text-gray-200 py-0.5">
                           <button onClick={() => getSite(feed.url)}>{feed.name}</button>
                         </li>
@@ -99,7 +102,7 @@ const Sidebar = () => {
         </ul>
       </section>
       <section className="absolute bottom-4 left-2 w-[90%]">
-        {Object.keys(user).length == 0 && (
+        {Object.keys(user).length > 0 && (
           <>
             <button
               onClick={() => setIsLogoutPopupOpen(true)}
