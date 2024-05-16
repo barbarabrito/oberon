@@ -1,4 +1,5 @@
 import supabase from "@//lib/supabase/supabase-client"
+import { PostgrestError } from "@supabase/supabase-js"
 import { NextRequest, NextResponse } from "next/server"
 
 export async function GET(req: NextRequest, { params }: { params: { userId: string } }) {
@@ -44,15 +45,30 @@ export async function POST(req: NextRequest, { params }: { params: { userId: str
     )
   }
 
-  const { data: folder, error } = await supabase.from("folders").insert([
-    {
-      name: data.name,
-      user_id: params.userId,
-    },
-  ])
+  const {
+    data: folder,
+    error,
+  }: {
+    data: {
+      id: number
+      name: string
+      created_at: string
+      updated_at: string
+      user_id: string
+    } | null
+    error: PostgrestError | null
+  } = await supabase
+    .from("folders")
+    .insert([
+      {
+        name: data.name,
+        user_id: params.userId,
+      },
+    ])
+    .single()
 
   if (error) {
-    NextResponse.json({ message: error.message }, { status: 201 })
+    NextResponse.json({ message: error.message }, { status: Number(error.code) })
   }
 
   return NextResponse.json(folder, { status: 201 })

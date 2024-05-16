@@ -15,7 +15,7 @@ export interface UserFeed {
 export interface Folders {
   id: number
   user_id: string
-  name: number
+  name: string
   rss_feeds: UserFeed[]
 }
 

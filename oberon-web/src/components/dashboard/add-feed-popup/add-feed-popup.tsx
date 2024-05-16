@@ -6,35 +6,53 @@ import { ChangeEvent, FormEvent, MouseEvent, useState } from "react"
 import { FaRss } from "react-icons/fa"
 import { IoMdClose } from "react-icons/io"
 import { TbTrashX } from "react-icons/tb"
-import { Dialog, DialogClose, DialogContent, DialogOverlay, DialogTitle } from "../../ui/popup"
+import { Dialog, DialogClose, DialogContent, DialogOverlay } from "../../ui/popup"
 
 type SelectOptions = "SELECT_FOLDER" | "CREATE_NEW_FOLDER"
 
+type FormData = {
+  folder: {
+    id?: number
+    name?: string
+    user_id: string
+  }
+  rss_feed: {
+    name: string
+    url: string
+    image_url: string | null
+  }
+}
+
 const AddFeedPopup = () => {
-  const { isAddFeedPopupOpen, setIsAddFeedPopupOpen, folders } = useBoundStore()
-  const [feedUrl, setFeedUrl] = useState("")
+  const { isAddFeedPopupOpen, setIsAddFeedPopupOpen, folders, user } = useBoundStore()
   const [selectedOption, setSelectedOption] = useState<SelectOptions>("SELECT_FOLDER")
   const [feedPreview, setFeedPreview] = useState({
     name: "",
     image_url: {} as string | null,
   })
+  const [formData, setFormData] = useState<FormData>({
+    folder: {
+      id: 0,
+      name: "",
+      user_id: "",
+    },
+    rss_feed: {
+      name: "",
+      url: "",
+      image_url: "",
+    },
+  })
 
   async function addNewFeed(e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) {
     e.preventDefault()
 
-    const xmlFeed = await getRssFeed(feedUrl)
+    const xmlFeed = await getRssFeed(formData.rss_feed.url)
 
     if (xmlFeed) {
-      const feed = {
-        name: xmlFeed.rss.channel[0].title[0],
-        url: feedUrl,
-        image: xmlFeed.rss.channel[0].image ? xmlFeed.rss.channel[0].image[0].url[0] : null,
-      }
       setFeedPreview({
-        name: feed.name,
-        image_url: feed.image,
+        name: xmlFeed.rss.channel[0].title[0],
+        image_url: xmlFeed.rss.channel[0].image ? xmlFeed.rss.channel[0].image[0].url[0] : null,
       })
-      console.log(feed)
     }
   }
 
@@ -42,15 +60,78 @@ const AddFeedPopup = () => {
     setSelectedOption(e.target.value as SelectOptions)
   }
 
-  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
-    setIsAddFeedPopupOpen(false)
+
+    setFormData({
+      ...formData,
+      folder: {
+        id: folders[0] && formData.folder.id === 0 ? folders[0].id : formData.folder.id,
+        name: formData.folder.name,
+        user_id: user.id,
+      },
+      rss_feed: {
+        name: feedPreview.name,
+        image_url: feedPreview.image_url,
+        url: formData.rss_feed.url
+      },
+    })
+    console.log(formData)
+    // await createFolder()
+    // await createFeed()
+    // clearAll()
   }
 
   function cancel() {
     setFeedPreview({
       name: "",
       image_url: null,
+    })
+  }
+
+  function handleSelectFolder(e: ChangeEvent<HTMLSelectElement>) {
+    setFormData({
+      ...formData,
+      ...formData.rss_feed,
+      folder: { id: Number(e.target.value), user_id: user.id },
+    })
+  }
+
+  async function createFolder() {
+    const folder = await fetch(`/api/users/${user.id}/folders`, {
+      method: "POST",
+      body: JSON.stringify(formData.folder),
+    })
+
+    console.log(folder)
+  }
+
+  async function createFeed() {
+    const feed = await fetch(`/api/users/${user.id}/rss_feeds`, {
+      method: "POST",
+      body: JSON.stringify(formData.rss_feed),
+    })
+
+    console.log(feed)
+  }
+
+  function clearAll() {
+    setFeedPreview({
+      name: "",
+      image_url: null,
+    })
+
+    setFormData({
+      folder: {
+        id: 0,
+        name: "",
+        user_id: "",
+      },
+      rss_feed: {
+        name: "",
+        url: "",
+        image_url: "",
+      },
     })
   }
 
@@ -62,13 +143,23 @@ const AddFeedPopup = () => {
             <IoMdClose className="text-4xl" />
           </DialogClose>
 
-          <form onSubmit={handleSubmit} className="w-1/3 m-auto">
+          <form onSubmit={handleSubmit} className="w-full md:w-[580px] m-auto">
             <div className="flex items-center h-12">
               <input
                 type="text"
                 className="w-full px-2 block outline-none text-base bg-transparent border border-indigo-400 rounded-l-md border-r-none h-full disabled:opacity-20"
                 value={"https://techcrunch.com/feed/"}
-                onChange={(e) => setFeedUrl(e.target.value)}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    ...formData.folder,
+                    rss_feed: {
+                      name: formData.rss_feed.name,
+                      image_url: formData.rss_feed.image_url,
+                      url: e.target.value,
+                    },
+                  })
+                }
                 disabled={feedPreview.name ? true : false}
               />
               <button
@@ -125,6 +216,8 @@ const AddFeedPopup = () => {
                             name="folders_selector"
                             id="folders_selector"
                             className="bg-black"
+                            value={formData.folder.id}
+                            onChange={handleSelectFolder}
                           >
                             {folders.map((folder) => (
                               <option value={folder.id} key={folder.id}>
