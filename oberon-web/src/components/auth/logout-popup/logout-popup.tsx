@@ -2,7 +2,14 @@
 
 import { Dispatch, SetStateAction } from "react"
 import { useRouter } from "next/navigation"
-import { Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "../../ui/popup"
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "../../ui/popup"
 import { createSupabaseBrowserClient } from "@//lib/supabase/supabase-browser-client"
 
 const LogoutPopup = ({
