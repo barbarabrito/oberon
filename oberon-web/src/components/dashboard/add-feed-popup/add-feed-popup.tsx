@@ -10,17 +10,16 @@ import { Dialog, DialogClose, DialogContent, DialogOverlay } from "../../ui/popu
 
 type SelectOptions = "SELECT_FOLDER" | "CREATE_NEW_FOLDER"
 
-type FormData = {
-  folder: {
-    id?: number
-    name?: string
-    user_id: string
-  }
-  rss_feed: {
-    name: string
-    url: string
-    image_url: string | null
-  }
+type Feed = {
+  name: string
+  url: string
+  image_url: string | null
+}
+
+type Folder = {
+  id?: number
+  name?: string
+  user_id?: string
 }
 
 const AddFeedPopup = () => {
@@ -30,23 +29,23 @@ const AddFeedPopup = () => {
     name: "",
     image_url: {} as string | null,
   })
-  const [formData, setFormData] = useState<FormData>({
-    folder: {
-      id: 0,
-      name: "",
-      user_id: "",
-    },
-    rss_feed: {
-      name: "",
-      url: "",
-      image_url: "",
-    },
+
+  const [feed, setFeed] = useState<Feed>({
+    name: "",
+    url: "",
+    image_url: "",
+  })
+
+  const [folder, setFolder] = useState<Folder>({
+    id: 0,
+    name: "",
+    user_id: "",
   })
 
   async function addNewFeed(e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) {
     e.preventDefault()
 
-    const xmlFeed = await getRssFeed(formData.rss_feed.url)
+    const xmlFeed = await getRssFeed(feed.url)
 
     if (xmlFeed) {
       setFeedPreview({
@@ -60,26 +59,16 @@ const AddFeedPopup = () => {
     setSelectedOption(e.target.value as SelectOptions)
   }
 
-  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  async function createFeed(e: any) {
     e.preventDefault()
-
-    setFormData({
-      ...formData,
-      folder: {
-        id: folders[0] && formData.folder.id === 0 ? folders[0].id : formData.folder.id,
-        name: formData.folder.name,
-        user_id: user.id,
-      },
-      rss_feed: {
-        name: feedPreview.name,
-        image_url: feedPreview.image_url,
-        url: formData.rss_feed.url
-      },
-    })
-    console.log(formData)
-    // await createFolder()
-    // await createFeed()
-    // clearAll()
+    const folderId = folders[0] && folder.id === 0 ? folders[0].id : folder.id
+    const newFeed = {
+      name: feedPreview.name,
+      image_url: feedPreview.image_url,
+      folder_id: folderId,
+      url: feed.url,
+    }
+    postFeed(newFeed)
   }
 
   function cancel() {
@@ -90,29 +79,31 @@ const AddFeedPopup = () => {
   }
 
   function handleSelectFolder(e: ChangeEvent<HTMLSelectElement>) {
-    setFormData({
-      ...formData,
-      ...formData.rss_feed,
-      folder: { id: Number(e.target.value), user_id: user.id },
+    const folderId = folders[0] && folder.id === 0 ? folders[0].id : folder.id
+    setFolder({
+      id: folderId,
+      name: "",
+      user_id: "",
     })
   }
 
-  async function createFolder() {
-    const folder = await fetch(`/api/users/${user.id}/folders`, {
+  async function createFolder(e: any) {
+    e.preventDefault()
+    const response = await fetch(`/api/users/${user.id}/folders`, {
       method: "POST",
-      body: JSON.stringify(formData.folder),
+      body: JSON.stringify(folder),
     })
 
-    console.log(folder)
+    console.log(response)
   }
 
-  async function createFeed() {
-    const feed = await fetch(`/api/users/${user.id}/rss_feeds`, {
+  async function postFeed(feed: any) {
+    const response = await fetch(`/api/users/${user.id}/rss_feeds`, {
       method: "POST",
-      body: JSON.stringify(formData.rss_feed),
+      body: JSON.stringify(feed),
     })
 
-    console.log(feed)
+    if (response.ok) clearAll()
   }
 
   function clearAll() {
@@ -121,17 +112,16 @@ const AddFeedPopup = () => {
       image_url: null,
     })
 
-    setFormData({
-      folder: {
-        id: 0,
-        name: "",
-        user_id: "",
-      },
-      rss_feed: {
-        name: "",
-        url: "",
-        image_url: "",
-      },
+    setFeed({
+      name: "",
+      url: "",
+      image_url: "",
+    })
+
+    setFolder({
+      id: 0,
+      name: "",
+      user_id: "",
     })
   }
 
@@ -143,23 +133,13 @@ const AddFeedPopup = () => {
             <IoMdClose className="text-4xl" />
           </DialogClose>
 
-          <form onSubmit={handleSubmit} className="w-full md:w-[580px] m-auto">
+          <form className="w-full md:w-[580px] m-auto">
             <div className="flex items-center h-12">
               <input
                 type="text"
                 className="w-full px-2 block outline-none text-base bg-transparent border border-indigo-400 rounded-l-md border-r-none h-full disabled:opacity-20"
                 value={"https://techcrunch.com/feed/"}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    ...formData.folder,
-                    rss_feed: {
-                      name: formData.rss_feed.name,
-                      image_url: formData.rss_feed.image_url,
-                      url: e.target.value,
-                    },
-                  })
-                }
+                onChange={(e) => setFeed({ name: "", image_url: "", url: e.target.value })}
                 disabled={feedPreview.name ? true : false}
               />
               <button
@@ -182,16 +162,32 @@ const AddFeedPopup = () => {
                     )}{" "}
                     {feedPreview.name}
                   </div>
-                  <div className="flex items-center">
-                    <button onClick={cancel}>
-                      <TbTrashX className="text-red-400 text-xl" />
-                    </button>
-                    <input
-                      className="h-full px-3 py-1.5 text-indigo-400 rounded-md cursor-pointer"
-                      type="submit"
-                      value="Save"
-                    />
-                  </div>
+                  {selectedOption === "SELECT_FOLDER" && (
+                    <div className="flex items-center">
+                      <button onClick={cancel}>
+                        <TbTrashX className="text-red-400 text-xl" />
+                      </button>
+                      <button
+                        onClick={createFeed}
+                        className="h-full px-3 py-1.5 text-indigo-400 rounded-md cursor-pointer"
+                      >
+                        Save
+                      </button>
+                    </div>
+                  )}
+                  {selectedOption === "CREATE_NEW_FOLDER" && (
+                    <div className="flex items-center">
+                      <button onClick={cancel}>
+                        <TbTrashX className="text-red-400 text-xl" />
+                      </button>
+                      <button
+                        onClick={createFolder}
+                        className="h-full px-3 py-1.5 text-indigo-400 rounded-md cursor-pointer"
+                      >
+                        Save
+                      </button>
+                    </div>
+                  )}
                 </div>
 
                 <div className="mt-1">
@@ -216,7 +212,7 @@ const AddFeedPopup = () => {
                             name="folders_selector"
                             id="folders_selector"
                             className="bg-black"
-                            value={formData.folder.id}
+                            value={folder.id}
                             onChange={handleSelectFolder}
                           >
                             {folders.map((folder) => (
