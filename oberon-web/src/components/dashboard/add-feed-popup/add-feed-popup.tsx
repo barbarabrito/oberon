@@ -8,7 +8,8 @@ import { IoMdClose } from "react-icons/io"
 import { TbTrashX } from "react-icons/tb"
 import { Dialog, DialogClose, DialogContent, DialogOverlay } from "../../ui/popup"
 import { RiSettingsLine } from "react-icons/ri"
-import { IoClose } from "react-icons/io5";
+import { IoClose } from "react-icons/io5"
+import { normalizeUrl } from "@//utils/url-normalizer"
 
 type SelectOptions = "SELECT_FOLDER" | "CREATE_NEW_FOLDER"
 
@@ -48,6 +49,9 @@ const AddFeedPopup = () => {
   async function addNewFeed(e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) {
     e.preventDefault()
 
+    const normalizedUrl = normalizeUrl(feed.url)
+    setFeed({ ...feed, url: normalizedUrl })
+
     const searchResult = await searchUserFeeds()
     if (searchResult) {
       setIsFeedAlreadyAdded(searchResult)
@@ -68,7 +72,7 @@ const AddFeedPopup = () => {
     const response = await fetch(`/api/users/${user.id}/rss_feeds/search`, {
       method: "POST",
       body: JSON.stringify({
-        feed_url: feed.url
+        feed_url: feed.url,
       }),
     })
 
@@ -174,8 +178,10 @@ const AddFeedPopup = () => {
     <Dialog open={isAddFeedPopupOpen} onOpenChange={setIsAddFeedPopupOpen}>
       <DialogOverlay className="bg-black/90">
         <DialogContent className="bg-transparent w-full h-full max-w-none">
-          <DialogClose className="m-4">
-            <IoMdClose className="text-4xl" />
+          <DialogClose className="m-4" asChild>
+            <button onClick={cancel}>
+              <IoMdClose className="text-4xl" />
+            </button>
           </DialogClose>
 
           <form className="w-full md:w-[580px] m-auto">
@@ -208,7 +214,10 @@ const AddFeedPopup = () => {
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <button onClick={cancel} className="flex items-center gap-0.5 text-red-300 text-xs -mt-1 relative group ">
+                  <button
+                    onClick={cancel}
+                    className="flex items-center gap-0.5 text-red-300 text-xs -mt-1 relative group "
+                  >
                     <IoClose className="h-4 w-4" />
                     Cancel
                   </button>
