@@ -3,8 +3,9 @@ import { PostgrestResponse } from "@supabase/supabase-js"
 import { NextRequest, NextResponse } from "next/server"
 
 export async function POST(req: NextRequest, { params }: { params: { userId: string } }) {
-  if (req.method !== "POST")
-    return NextResponse.json({ message: "Method not allowed" }, { status: 405 })
+  if (req.method !== "POST") {
+    NextResponse.json({ message: "Method not allowed" }, { status: 405 })
+  }
 
   const data = await req.json()
 

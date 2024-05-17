@@ -2,11 +2,13 @@
 
 import { getRssFeed } from "@//features/rss-feed/api/get-rss-feed"
 import useBoundStore from "@//stores/store"
-import { ChangeEvent, FormEvent, MouseEvent, useState } from "react"
+import { ChangeEvent, MouseEvent, useState } from "react"
 import { FaRss } from "react-icons/fa"
 import { IoMdClose } from "react-icons/io"
 import { TbTrashX } from "react-icons/tb"
 import { Dialog, DialogClose, DialogContent, DialogOverlay } from "../../ui/popup"
+import { RiSettingsLine } from "react-icons/ri"
+import { IoClose } from "react-icons/io5";
 
 type SelectOptions = "SELECT_FOLDER" | "CREATE_NEW_FOLDER"
 
@@ -25,6 +27,7 @@ type Folder = {
 const AddFeedPopup = () => {
   const { isAddFeedPopupOpen, setIsAddFeedPopupOpen, folders, user } = useBoundStore()
   const [selectedOption, setSelectedOption] = useState<SelectOptions>("SELECT_FOLDER")
+  const [isFeedAlreadyAdded, setIsFeedAlreadyAdded] = useState(false)
   const [feedPreview, setFeedPreview] = useState({
     name: "",
     image_url: {} as string | null,
@@ -45,6 +48,12 @@ const AddFeedPopup = () => {
   async function addNewFeed(e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) {
     e.preventDefault()
 
+    const searchResult = await searchUserFeeds()
+    if (searchResult) {
+      setIsFeedAlreadyAdded(searchResult)
+      return
+    }
+
     const xmlFeed = await getRssFeed(feed.url)
 
     if (xmlFeed) {
@@ -55,11 +64,36 @@ const AddFeedPopup = () => {
     }
   }
 
+  async function searchUserFeeds(): Promise<boolean> {
+    const response = await fetch(`/api/users/${user.id}/rss_feeds/search`, {
+      method: "POST",
+      body: JSON.stringify({
+        feed_url: feed.url
+      }),
+    })
+
+    if (!response.ok) return false
+
+    const userFeed = await response.json()
+    console.log(userFeed)
+    if (userFeed.hasOwnProperty("id")) {
+      setIsFeedAlreadyAdded(true)
+      setFeedPreview({
+        name: userFeed.name,
+        image_url: userFeed.image_url ?? null,
+      })
+
+      return true
+    }
+
+    return false
+  }
+
   function handleOptionChange(e: ChangeEvent<HTMLInputElement>) {
     setSelectedOption(e.target.value as SelectOptions)
   }
 
-  async function createFeed(e: any) {
+  async function createFeed(e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) {
     e.preventDefault()
     const folderId = folders[0] && folder.id === 0 ? folders[0].id : folder.id
     const newFeed = {
@@ -76,6 +110,17 @@ const AddFeedPopup = () => {
       name: "",
       image_url: null,
     })
+    setFeed({
+      name: "",
+      url: "",
+      image_url: "",
+    })
+    setFolder({
+      id: 0,
+      name: "",
+      user_id: "",
+    })
+    setIsFeedAlreadyAdded(false)
   }
 
   function handleSelectFolder(e: ChangeEvent<HTMLSelectElement>) {
@@ -87,7 +132,7 @@ const AddFeedPopup = () => {
     })
   }
 
-  async function createFolder(e: any) {
+  async function createFolder(e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) {
     e.preventDefault()
     const response = await fetch(`/api/users/${user.id}/folders`, {
       method: "POST",
@@ -97,7 +142,7 @@ const AddFeedPopup = () => {
     console.log(response)
   }
 
-  async function postFeed(feed: any) {
+  async function postFeed(feed: Feed) {
     const response = await fetch(`/api/users/${user.id}/rss_feeds`, {
       method: "POST",
       body: JSON.stringify(feed),
@@ -138,8 +183,8 @@ const AddFeedPopup = () => {
               <input
                 type="text"
                 className="w-full px-2 block outline-none text-base bg-transparent border border-indigo-400 rounded-l-md border-r-none h-full disabled:opacity-20"
-                value={"https://techcrunch.com/feed/"}
-                onChange={(e) => setFeed({ name: "", image_url: "", url: e.target.value })}
+                value={feed.url}
+                onChange={(e) => setFeed({ ...feed, url: e.target.value })}
                 disabled={feedPreview.name ? true : false}
               />
               <button
@@ -151,7 +196,32 @@ const AddFeedPopup = () => {
               </button>
             </div>
             <div className="p-1"></div>
-            {feedPreview.name && (
+            {isFeedAlreadyAdded && (
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-1.5 p-1">
+                  {feedPreview.image_url ? (
+                    <img src={feedPreview.image_url} alt="Feed icon" width={20} height={20} />
+                  ) : (
+                    <FaRss className="text-orange-300" />
+                  )}{" "}
+                  {feedPreview.name}
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <button onClick={cancel} className="flex items-center gap-0.5 text-red-300 text-xs -mt-1 relative group ">
+                    <IoClose className="h-4 w-4" />
+                    Cancel
+                  </button>
+
+                  <button className="flex items-center gap-0.5 text-orange-300 text-xs relative group mr-0.5 -mt-1">
+                    <RiSettingsLine className="h-4 w-4" />
+                    Manage feed
+                    <span className="absolute -bottom-1 left-0 w-0 h-[2px] bg-orange-300 transition-all duration-300 group-hover:w-full"></span>
+                  </button>
+                </div>
+              </div>
+            )}
+            {!isFeedAlreadyAdded && feedPreview.name && (
               <div className="border rounded-md p-4 pb-10 border-indigo-300 border-opacity-15">
                 <div className="mt-3 text-gray-300 gap-2 mb-4 flex justify-between">
                   <div className=" flex items-center gap-1.5">
