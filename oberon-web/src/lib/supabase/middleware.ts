@@ -56,7 +56,10 @@ export async function updateSession(request: NextRequest) {
 
   const user = await supabase.auth.getUser()
 
-  if (request.nextUrl.pathname.startsWith("/dashboard") && user.error) {
+  if (
+    request.nextUrl.pathname.startsWith("/dashboard") ||
+    (request.nextUrl.pathname.startsWith("/auth/sign-up") && user.error)
+  ) {
     return NextResponse.redirect(new URL("/auth/sign-in", request.url))
   }
 
