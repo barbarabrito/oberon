@@ -68,7 +68,7 @@ const AddFeedPopup = () => {
     }
   }
 
-  async function searchUserFeeds(): Promise<boolean> {
+  async function searchUserFeeds(): Promise<boolean | null> {
     const response = await fetch(`/api/users/${user.id}/rss_feeds/search`, {
       method: "POST",
       body: JSON.stringify({
@@ -76,10 +76,8 @@ const AddFeedPopup = () => {
       }),
     })
 
-    if (!response.ok) return false
-
     const userFeed = await response.json()
-    console.log(userFeed)
+
     if (userFeed.hasOwnProperty("id")) {
       setIsFeedAlreadyAdded(true)
       setFeedPreview({

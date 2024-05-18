@@ -11,9 +11,18 @@ import useBoundStore from "@//stores/store"
 import { getRssFeed } from "@//features/rss-feed/api/get-rss-feed"
 import AddFeedPopup from "../../dashboard/add-feed-popup/add-feed-popup"
 import { LogoutPopup } from "../../auth/logout-popup"
+import CreateFolderPopup from "../../dashboard/create-folder-popup/create-folder-popup"
 
 const Sidebar = () => {
-  const { setFeed, user, setIsAddFeedPopupOpen, folders, setFolders } = useBoundStore()
+  const {
+    setFeed,
+    user,
+    setIsAddFeedPopupOpen,
+    folders,
+    setFolders,
+    setIsCreateFolderPopupOpen,
+  } = useBoundStore()
+
   const [isLogoutPopupOpen, setIsLogoutPopupOpen] = useState(false)
 
   async function getSite(feedUrl: string) {
@@ -26,7 +35,7 @@ const Sidebar = () => {
       if (user.id) {
         try {
           const response = await fetch(`/api/users/${user.id}/folders`)
-          if (!response.ok) throw new Error("Failed to fetch folders")
+          if (!response.ok) return
 
           const folders = await response.json()
           console.log(folders)
@@ -58,18 +67,22 @@ const Sidebar = () => {
           >
             <FaRss className="h-4 w-5" /> New feed
           </button>
-          <button className="flex items-center gap-1 mb-1.5 hover:text-gray-400">
+          <button
+            onClick={() => setIsCreateFolderPopupOpen(true)}
+            className="flex items-center gap-1 mb-1.5 hover:text-gray-400"
+          >
             <MdOutlineCreateNewFolder className="h-5 w-5 " /> New folder
           </button>
           {/* <button className="flex items-center gap-1 hover:text-gray-400">
             <RiSettingsLine className="h-5 w-5" />
           </button> */}
           <AddFeedPopup />
+          <CreateFolderPopup />
         </div>
       </section>
       <section className="mt-2 px-4">
         <ul>
-          {folders.map((folder) => (
+          {folders?.map((folder) => (
             <li key={folder.id} className="py-0.5">
               <Collapsible.Root defaultOpen>
                 <Collapsible.Trigger className="flex items-center gap-1 w-full justify-between py-0.5">
