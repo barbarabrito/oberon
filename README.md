@@ -1,3 +1,3 @@
-An RSS aggregator built with nextjs.
+An RSS aggregator.
 
-###### &#9888; Unfinished
+###### &#9888; Under development

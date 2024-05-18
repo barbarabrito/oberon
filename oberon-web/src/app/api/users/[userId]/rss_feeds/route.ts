@@ -38,7 +38,7 @@ export async function POST(req: NextRequest, { params }: { params: { userId: str
           name: data.name,
           url: data.url,
           image_url: data.image_url ?? null,
-          user_id: params.userId
+          user_id: params.userId,
         },
       ])
       .select()

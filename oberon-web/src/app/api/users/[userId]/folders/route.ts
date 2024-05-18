@@ -1,5 +1,5 @@
 import supabase from "@//lib/supabase/supabase-client"
-import { PostgrestResponse, PostgrestSingleResponse } from "@supabase/supabase-js"
+import { PostgrestSingleResponse } from "@supabase/supabase-js"
 import { NextRequest, NextResponse } from "next/server"
 
 export async function GET(req: NextRequest, { params }: { params: { userId: string } }) {

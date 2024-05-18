@@ -1,5 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
-
 import { getRssFeed } from "@//features/rss-feed/api/get-rss-feed"
 import useBoundStore from "@//stores/store"
 import { ChangeEvent, MouseEvent, useState } from "react"

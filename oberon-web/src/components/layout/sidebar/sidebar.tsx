@@ -5,7 +5,6 @@ import { MdFolderOpen, MdOutlineCreateNewFolder } from "react-icons/md"
 import { PiUserCircleFill } from "react-icons/pi"
 import * as Collapsible from "@radix-ui/react-collapsible"
 import { TbLogout } from "react-icons/tb"
-import { FaPlus } from "react-icons/fa"
 import { FaRss } from "react-icons/fa"
 import useBoundStore from "@//stores/store"
 import { getRssFeed } from "@//features/rss-feed/api/get-rss-feed"
@@ -84,14 +83,14 @@ const Sidebar = () => {
                     <div className="flex items-center gap-1.5 ">
                       <MdFolderOpen className="text-sm" /> {folder.name}
                     </div>
-                    <div className=" group-hover:block hidden text-xs text-gray-500">
+                    {/* <div className=" group-hover:block hidden text-xs text-gray-500">
                       <div className="flex items-center gap-1">
                         <button>
                           <FaPlus className="h-2.5 w-2.5 text-gray-500 group-hover:block hidden " />{" "}
                         </button>
                         Add feed
                       </div>
-                    </div>
+                    </div> */}
                   </div>
                 </Collapsible.Trigger>
                 <Collapsible.Content>
@@ -99,7 +98,16 @@ const Sidebar = () => {
                     <ul className="text-sm">
                       {folder.rss_feeds.map((feed, index) => (
                         <li key={index} className="text-gray-400 hover:text-gray-200 py-0.5">
-                          <button onClick={() => getSite(feed.url)}>{feed.name}</button>
+                          <button onClick={() => getSite(feed.url)}>
+                            <div className="flex items-center gap-2">
+                              {feed.image_url ? (
+                                <img src={feed.image_url} width={14} height={14} alt="Feed icon" />
+                              ) : (
+                                <FaRss className="w-3 h-3 text-gray-200" />
+                              )}
+                              {feed.name}
+                            </div>
+                          </button>
                         </li>
                       ))}
                     </ul>
