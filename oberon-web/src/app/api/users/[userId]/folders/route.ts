@@ -58,7 +58,7 @@ export async function POST(req: NextRequest, { params }: { params: { userId: str
     .insert([
       {
         name: data.name,
-        user_id: params.userId
+        user_id: params.userId,
       },
     ])
     .select()

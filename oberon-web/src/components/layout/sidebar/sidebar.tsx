@@ -14,14 +14,8 @@ import { LogoutPopup } from "../../auth/logout-popup"
 import CreateFolderPopup from "../../dashboard/create-folder-popup/create-folder-popup"
 
 const Sidebar = () => {
-  const {
-    setFeed,
-    user,
-    setIsAddFeedPopupOpen,
-    folders,
-    setFolders,
-    setIsCreateFolderPopupOpen,
-  } = useBoundStore()
+  const { setFeed, user, setIsAddFeedPopupOpen, folders, setFolders, setIsCreateFolderPopupOpen } =
+    useBoundStore()
 
   const [isLogoutPopupOpen, setIsLogoutPopupOpen] = useState(false)
 

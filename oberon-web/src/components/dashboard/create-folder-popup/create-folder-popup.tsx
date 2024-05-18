@@ -3,7 +3,7 @@ import { Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader } f
 import useBoundStore from "@//stores/store"
 import { DialogTitle } from "@radix-ui/react-dialog"
 import { FormEvent, useState } from "react"
-import { RiErrorWarningLine } from "react-icons/ri";
+import { RiErrorWarningLine } from "react-icons/ri"
 
 const CreateFolderPopup = () => {
   const { isCreateFolderPopupOpen, setIsCreateFolderPopupOpen } = useBoundStore()
@@ -78,11 +78,11 @@ const CreateFolderPopup = () => {
                   value={folderName}
                   onChange={(e) => setFolderName(e.target.value)}
                 />
-                {folderAlreadyExists &&
+                {folderAlreadyExists && (
                   <div className="flex items-center gap-1 mt-2 text-red-400">
                     <RiErrorWarningLine /> A folder with this name already exists
                   </div>
-                }
+                )}
               </div>
               <div className="flex items-center gap-3 justify-end mt-6">
                 <button onClick={cancel} className="p-1 px-3 border border-gray-500 rounded-md">
