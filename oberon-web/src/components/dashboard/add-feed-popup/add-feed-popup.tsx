@@ -142,6 +142,17 @@ const AddFeedPopup = () => {
     })
 
     console.log(response)
+
+    const { id: folderId } = await response.json()
+
+    const newFeed = {
+      name: feedPreview.name,
+      image_url: feedPreview.image_url,
+      folder_id: folderId,
+      url: feed.url,
+    }
+    console.log(newFeed)
+    postFeed(newFeed)
   }
 
   async function postFeed(feed: Feed) {
@@ -327,6 +338,8 @@ const AddFeedPopup = () => {
                             placeholder=""
                             required
                             disabled={selectedOption !== "CREATE_NEW_FOLDER"}
+                            value={folder.name}
+                            onChange={(e) => setFolder({ ...folder, name: e.target.value })}
                           />
                         )}
                       </div>

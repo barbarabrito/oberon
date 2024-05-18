@@ -1,5 +1,5 @@
 import supabase from "@//lib/supabase/supabase-client"
-import { PostgrestResponse } from "@supabase/supabase-js"
+import { PostgrestResponse, PostgrestSingleResponse } from "@supabase/supabase-js"
 import { NextRequest, NextResponse } from "next/server"
 
 export async function GET(req: NextRequest, { params }: { params: { userId: string } }) {
@@ -47,7 +47,7 @@ export async function POST(req: NextRequest, { params }: { params: { userId: str
   const {
     data: folder,
     error,
-  }: PostgrestResponse<{
+  }: PostgrestSingleResponse<{
     id: number
     name: string
     created_at: string
@@ -62,6 +62,7 @@ export async function POST(req: NextRequest, { params }: { params: { userId: str
       },
     ])
     .select()
+    .single()
 
   if (error) {
     NextResponse.json({ message: error.message }, { status: 500 })

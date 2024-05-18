@@ -1,5 +1,5 @@
 import supabase from "@//lib/supabase/supabase-client"
-import { PostgrestResponse } from "@supabase/supabase-js"
+import { PostgrestResponse, PostgrestSingleResponse } from "@supabase/supabase-js"
 import { NextRequest, NextResponse } from "next/server"
 
 export async function POST(req: NextRequest, { params }: { params: { userId: string } }) {
@@ -24,7 +24,7 @@ export async function POST(req: NextRequest, { params }: { params: { userId: str
     const {
       data: feed,
       error: feedError,
-    }: PostgrestResponse<{
+    }: PostgrestSingleResponse<{
       id: number
       name: string
       url: string
@@ -38,9 +38,11 @@ export async function POST(req: NextRequest, { params }: { params: { userId: str
           name: data.name,
           url: data.url,
           image_url: data.image_url ?? null,
+          user_id: params.userId
         },
       ])
       .select()
+      .single()
 
     if (feedError) {
       return NextResponse.json({ status: 500 })
@@ -49,7 +51,7 @@ export async function POST(req: NextRequest, { params }: { params: { userId: str
     if (feed) {
       const { error: feedFoldersError } = await supabase
         .from("rss_feed_folders")
-        .insert([{ folder_id: data.folder_id, rss_feed_id: feed[0].id }])
+        .insert([{ folder_id: data.folder_id, rss_feed_id: feed.id }])
 
       if (feedFoldersError) {
         return NextResponse.json(feedError, { status: 500 })

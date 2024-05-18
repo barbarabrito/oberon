@@ -1,3 +1,3 @@
-An RSS aggregator whose UI doesn't suck.
+An RSS aggregator built with nextjs.
 
 ###### &#9888; Unfinished
