@@ -8,6 +8,8 @@ import { Dialog, DialogClose, DialogContent, DialogOverlay } from "../../ui/popu
 import { RiSettingsLine } from "react-icons/ri"
 import { IoClose } from "react-icons/io5"
 import { normalizeUrl } from "@//utils/url-normalizer"
+import { postUserFeed, searchUserFeedByUrl } from "@//services/userFeeds.service"
+import { postUserFolder } from "@//services/userFolders.service"
 
 type SelectOptions = "SELECT_FOLDER" | "CREATE_NEW_FOLDER"
 
@@ -67,16 +69,9 @@ const AddFeedPopup = () => {
   }
 
   async function searchUserFeeds(): Promise<boolean | null> {
-    const response = await fetch(`/api/users/${user.id}/rss_feeds/search`, {
-      method: "POST",
-      body: JSON.stringify({
-        feed_url: feed.url,
-      }),
-    })
+    const userFeed = await searchUserFeedByUrl(user.id, feed.url)
 
-    const userFeed = await response.json()
-
-    if (userFeed.hasOwnProperty("id")) {
+    if (userFeed?.hasOwnProperty("id")) {
       setIsFeedAlreadyAdded(true)
       setFeedPreview({
         name: userFeed.name,
@@ -134,10 +129,7 @@ const AddFeedPopup = () => {
 
   async function createFolder(e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) {
     e.preventDefault()
-    const response = await fetch(`/api/users/${user.id}/folders`, {
-      method: "POST",
-      body: JSON.stringify(folder),
-    })
+    const response = await postUserFolder(user.id, feed.url)
 
     console.log(response)
 
@@ -154,12 +146,9 @@ const AddFeedPopup = () => {
   }
 
   async function postFeed(feed: Feed) {
-    const response = await fetch(`/api/users/${user.id}/rss_feeds`, {
-      method: "POST",
-      body: JSON.stringify(feed),
-    })
+    const response = await postUserFeed(user.id, feed)
 
-    if (response.ok) clearAll()
+    if (response?.hasOwnProperty("id")) clearAll()
   }
 
   function clearAll() {

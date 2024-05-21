@@ -1,6 +1,6 @@
 "use server"
 
-import { RssFeed } from "../types/types"
+import { RssFeed } from "@//types/types"
 
 const parseString = require("xml2js").parseString
 

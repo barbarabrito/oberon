@@ -60,3 +60,13 @@ export type Enclosure = {
   length?: string[]
   type?: string[]
 }
+
+export type Folder = {
+  id: number
+  created_at: Date
+  updated_at: Date
+  name: string
+  url: string
+  image_url: string
+  user_id: string
+}

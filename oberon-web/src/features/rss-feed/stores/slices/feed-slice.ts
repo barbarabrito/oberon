@@ -1,5 +1,5 @@
+import { RssFeed } from "@//types/types"
 import { StateCreator } from "zustand"
-import { RssFeed } from "../../types/types"
 
 export interface FeedState {
   feeds: RssFeed

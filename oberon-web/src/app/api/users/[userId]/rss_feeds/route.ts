@@ -1,5 +1,6 @@
+import { UserFeed } from "@//features/rss-feed/stores/slices/feed-slice"
 import supabase from "@//lib/supabase/supabase-client"
-import { PostgrestResponse, PostgrestSingleResponse } from "@supabase/supabase-js"
+import { PostgrestSingleResponse } from "@supabase/supabase-js"
 import { NextRequest, NextResponse } from "next/server"
 
 export async function POST(req: NextRequest, { params }: { params: { userId: string } }) {
@@ -21,17 +22,7 @@ export async function POST(req: NextRequest, { params }: { params: { userId: str
   }
 
   try {
-    const {
-      data: feed,
-      error: feedError,
-    }: PostgrestSingleResponse<{
-      id: number
-      name: string
-      url: string
-      image_url: string
-      created_at: string
-      updated_at: string
-    }> = await supabase
+    const { data: feed, error: feedError }: PostgrestSingleResponse<UserFeed> = await supabase
       .from("rss_feeds")
       .insert([
         {
