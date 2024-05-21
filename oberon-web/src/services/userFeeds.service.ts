@@ -18,7 +18,7 @@ export async function postUserFeed(
   return await response.json()
 }
 
-export async function searchUserFeedByUrl(
+export async function findUserFeedByUrl(
   userId: string,
   feedUrl: string,
 ): Promise<UserFeed | null> {

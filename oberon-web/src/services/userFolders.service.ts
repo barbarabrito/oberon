@@ -11,7 +11,7 @@ export async function postUserFolder(userId: string, folder: string) {
   return folderId
 }
 
-export async function searchUserFolderByName(userId: string, folderName: string) {
+export async function findUserFolderByName(userId: string, folderName: string) {
   const response = await fetch(`/api/users/${userId}/folders/search`, {
     method: "POST",
     body: JSON.stringify({

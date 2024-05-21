@@ -8,7 +8,7 @@ import { Dialog, DialogClose, DialogContent, DialogOverlay } from "../../ui/popu
 import { RiSettingsLine } from "react-icons/ri"
 import { IoClose } from "react-icons/io5"
 import { normalizeUrl } from "@//utils/url-normalizer"
-import { postUserFeed, searchUserFeedByUrl } from "@//services/userFeeds.service"
+import { postUserFeed, findUserFeedByUrl } from "@//services/userFeeds.service"
 import { postUserFolder } from "@//services/userFolders.service"
 
 type SelectOptions = "SELECT_FOLDER" | "CREATE_NEW_FOLDER"
@@ -69,7 +69,7 @@ const AddFeedPopup = () => {
   }
 
   async function searchUserFeeds(): Promise<boolean | null> {
-    const userFeed = await searchUserFeedByUrl(user.id, feed.url)
+    const userFeed = await findUserFeedByUrl(user.id, feed.url)
 
     if (userFeed?.hasOwnProperty("id")) {
       setIsFeedAlreadyAdded(true)

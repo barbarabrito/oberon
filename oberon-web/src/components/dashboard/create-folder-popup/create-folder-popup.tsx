@@ -4,7 +4,7 @@ import useBoundStore from "@//stores/store"
 import { DialogTitle } from "@radix-ui/react-dialog"
 import { FormEvent, useState } from "react"
 import { RiErrorWarningLine } from "react-icons/ri"
-import { postUserFolder, searchUserFolderByName } from "@//services/userFolders.service"
+import { postUserFolder, findUserFolderByName } from "@//services/userFolders.service"
 
 const CreateFolderPopup = () => {
   const { isCreateFolderPopupOpen, setIsCreateFolderPopupOpen } = useBoundStore()
@@ -36,7 +36,7 @@ const CreateFolderPopup = () => {
   }
 
   async function searchUserFolders(): Promise<boolean> {
-    const response = await searchUserFolderByName(user.id, folderName)
+    const response = await findUserFolderByName(user.id, folderName)
 
     if (response.hasOwnProperty("id")) {
       setFolderAlreadyExists(true)
